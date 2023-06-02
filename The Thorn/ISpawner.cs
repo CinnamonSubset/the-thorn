@@ -2,7 +2,7 @@
 {
     internal interface ISpawner
     {
-        public MovingObject Spawn();
+        public MovingObject Spawn(bool force = false);
         public void WindowSizeChanged(int height, int width);
     }
 }

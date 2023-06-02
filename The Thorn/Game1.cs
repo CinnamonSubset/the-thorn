@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace The_Thorn
 {
@@ -48,10 +47,15 @@ namespace The_Thorn
 
         private void Window_ClientSizeChanged(object sender, EventArgs e)
         {
-            _movingObjects[0].WindowSizeChange(wHeight, wWidth, GraphicsDevice.Viewport.Bounds.Height, GraphicsDevice.Viewport.Bounds.Width);
+            foreach (var obj in _movingObjects)
+            {
+                obj.WindowSizeChange(wHeight, wWidth, GraphicsDevice.Viewport.Bounds.Height, GraphicsDevice.Viewport.Bounds.Width);
+            }
+
             // cache the new window bounderies
             wHeight = GraphicsDevice.Viewport.Bounds.Height;
             wWidth = GraphicsDevice.Viewport.Bounds.Width;
+
 
             foreach (var spawner in _spawners)
             {
@@ -63,7 +67,6 @@ namespace The_Thorn
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // playerTexture = Content.Load<Texture2D>("player");
             font = Content.Load<SpriteFont>("font");
             platformtexture = Content.Load<Texture2D>("platform");
 
@@ -71,7 +74,7 @@ namespace The_Thorn
             _spawners.Add(new CloudSpawner(this, wHeight, wWidth));
             _spawners.Add(new MountainSpawner(this, wHeight, wWidth));
             _spawners.Add(new ThornSpawner(this, wHeight, wWidth));
-            // TODO: use this.Content to load your game content here
+           
         }
 
         protected override void Update(GameTime gameTime)
@@ -109,7 +112,7 @@ namespace The_Thorn
                     {
                         Rectangle r1 = Thorn.Normalize(playerBox, collision);
                         Rectangle r2 = Thorn.Normalize(thornBox, collision);
-                        
+
                         if (Thorn.TestCollision(_movingObjects[0].Texture, r1, thorn.Texture, r2))
                         {
                             isPlaying = false;
@@ -141,14 +144,23 @@ namespace The_Thorn
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            //  _spriteBatch.Draw(playerTexture, new Vector2(40, 200), Color.White);
-            _spriteBatch.Draw(platformtexture, new Vector2(0, wHeight - platformtexture.Height), Color.White);
+          
 
             if (isPlaying)
             {
                 foreach (var item in _movingObjects)
                 {
-                    item.Draw(_spriteBatch);
+                    if (item is Mountain || item is Cloud)
+                    {
+                        item.Draw(_spriteBatch);
+                    }
+                }
+                foreach (var item in _movingObjects)
+                {
+                    if (item is Thorn || item is Player)
+                    {
+                        item.Draw(_spriteBatch);
+                    }
                 }
             }
             else
@@ -158,6 +170,7 @@ namespace The_Thorn
                 float textPosY = GraphicsDevice.Viewport.Bounds.Center.Y - stringSize.Y / 2;
                 _spriteBatch.DrawString(font, "Press ENTER to begin", new Vector2(textPosX, textPosY), Color.White);
             }
+            _spriteBatch.Draw(platformtexture, new Vector2(0, wHeight - platformtexture.Height), Color.White);
 
             _spriteBatch.End();
             // TODO: Add your drawing code here
@@ -170,7 +183,7 @@ namespace The_Thorn
             {
                 _movingObjects.RemoveAt(1);
             }
-          
+
         }
         public int GetPlatformHeight()
         {

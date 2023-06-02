@@ -17,17 +17,27 @@ namespace The_Thorn
             _lastSpawnTime = DateTime.MinValue;
         }
 
-        public MovingObject Spawn()
+        public MovingObject Spawn(bool force)
         {
-            TimeSpan deltaSpan = DateTime.Now - _lastSpawnTime;
-
-            if(deltaSpan.TotalSeconds > 10)
+            if (force)
             {
                 Cloud cloud = new Cloud(_game1, _windowHeight, _windowWidth);
                 _lastSpawnTime = DateTime.Now;
                 return cloud;
             }
-            return null;
+            else
+            {
+                TimeSpan deltaSpan = DateTime.Now - _lastSpawnTime;
+
+                if (deltaSpan.TotalSeconds > 10)
+                {
+                    Cloud cloud = new Cloud(_game1, _windowHeight, _windowWidth);
+                    _lastSpawnTime = DateTime.Now;
+                    return cloud;
+                }
+                return null;
+            }
+           
         }
 
         public void WindowSizeChanged(int height, int width)

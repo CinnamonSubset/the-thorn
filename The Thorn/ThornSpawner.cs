@@ -20,17 +20,26 @@ namespace The_Thorn
             _windowWidth = windowWidth;
             _lastSpawnTime = DateTime.MinValue;
         }
-        public MovingObject Spawn()
+        public MovingObject Spawn(bool force)
         {
-            TimeSpan deltaSpan = DateTime.Now - _lastSpawnTime;
-
-            if (deltaSpan.TotalSeconds > 3)
+            if (force)
             {
                 Thorn thorn = new Thorn(_game1, _windowHeight, _windowWidth);
-                _lastSpawnTime = DateTime.Now;
                 return thorn;
             }
-            return null;
+            else
+            {
+                TimeSpan deltaSpan = DateTime.Now - _lastSpawnTime;
+
+                if (deltaSpan.TotalSeconds > 3)
+                {
+                    Thorn thorn = new Thorn(_game1, _windowHeight, _windowWidth);
+                    _lastSpawnTime = DateTime.Now;
+                    return thorn;
+                }
+                return null;
+            }
+            
         }
         public void WindowSizeChanged(int height, int width)
         {
