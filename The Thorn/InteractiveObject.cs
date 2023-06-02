@@ -12,14 +12,13 @@ namespace The_Thorn
         public InteractiveObject(Game1 game1, Vector2 position, int windowHeight, int windowWidth)
             : base(game1, position, windowHeight, windowWidth)
         {
-            Dead = false;
-
+            Dead = false;  // Set the initial value of the "Dead" property to false
         }
 
         public Rectangle Hitbox()
         {
             return new Rectangle((int)Position.X, (int)Position.Y,
-                Texture.Width, Texture.Height);
+                Texture.Width, Texture.Height);  // Create and return a rectangle representing the hitbox of the object
         }
 
         public static Rectangle Intersection(Rectangle r1, Rectangle r2)

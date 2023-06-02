@@ -12,40 +12,39 @@ namespace The_Thorn
         private const float Gravity = 0.5f;
 
         public Player(Game1 game1, int windowHeight, int windowWidth)
-            : base(game1, new Vector2(), windowHeight, windowWidth)
+     : base(game1, new Vector2(), windowHeight, windowWidth)
         {
-            _velocity = new Vector2(0f, 0f);
-            _textureName = "player";
-            Initialize();
-            Position = new Vector2(50, _game1.GetPlatformHeight());
+            _velocity = new Vector2(0f, 0f);  // Set the initial velocity of the player
+            _textureName = "player";  // Set the name of the texture used for the player
+            Initialize();  // Initialize the player object
+            Position = new Vector2(50, _game1.GetPlatformHeight());  // Set the initial position of the player
         }
-        /// <summary>
-        /// Player motion
-        /// </summary>  
+
         public override void Update()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && !_isJumping)
             {
                 _isJumping = true;
-                _velocity.Y = JumpVelocity;
+                _velocity.Y = JumpVelocity;  // Set the vertical velocity to perform a jump
             }
 
             if (_isJumping)
             {
-                _velocity.Y += Gravity;
+                _velocity.Y += Gravity;  // Apply gravity to the vertical velocity
 
                 if (Position.Y + Texture.Height > _game1.GraphicsDevice.Viewport.Height - _game1.GetPlatformHeight())
                 {
                     _isJumping = false;
                     _velocity.Y = 0f;
-                    _position.Y = _game1.GraphicsDevice.Viewport.Height - _game1.GetPlatformHeight() - Texture.Height;
+                    _position.Y = _game1.GraphicsDevice.Viewport.Height - _game1.GetPlatformHeight() - Texture.Height;  // Adjust the position to stay on the platform
                 }
             }
 
-            Position += _velocity;
+            Position += _velocity;  // Update the position based on the velocity
 
             base.Update();
         }
+
 
         public override void WindowSizeChange(int oldHeight, int oldWidth, int newHeight, int newWidth)
         {
